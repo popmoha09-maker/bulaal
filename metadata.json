@@ -1,0 +1,10 @@
+{
+  "name": "Remix pop09",
+  "description": "A smart POS and mini-ERP system with cloud synchronization, inventory management, and real-time sales analytics.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

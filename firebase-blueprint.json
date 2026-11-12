@@ -1,0 +1,40 @@
+{
+  "entities": {
+    "companies": {
+      "title": "Companies",
+      "description": "Stores company credentials, secure sessions, and POS inventory state",
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "description": "Username or login ID"
+        },
+        "passcodeHash": {
+          "type": "string",
+          "description": "Cryptographically hashed password (SHA-256)"
+        },
+        "enterprise_name": {
+          "type": "string",
+          "description": "Enterprise or Store Name"
+        },
+        "activeSessions": {
+          "type": "object",
+          "description": "Active device sessions for secure one-time login"
+        },
+        "data": {
+          "type": "object",
+          "description": "Complete application state stored in database (products, inventory, invoices, shifts, users, etc.)"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when updated"
+        }
+      },
+      "required": [
+        "username",
+        "enterprise_name"
+      ]
+    }
+  }
+}

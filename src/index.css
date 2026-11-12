@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Cairo", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Tajawal", "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+@layer base {
+  *, ::before, ::after {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  html {
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "tnum";
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply font-sans antialiased text-slate-950 bg-slate-100 dark:bg-black dark:text-slate-50 transition-colors duration-200;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  /* High legibility adjustments for smaller zoom scales and high-density screens */
+  button, input, select, textarea, table, th, td {
+    font-feature-settings: "tnum", "cv02", "cv03", "cv04";
+    font-weight: 600;
+  }
+
+  /* Crisp contrast across light and dark displays */
+  .dark {
+    color-scheme: dark;
+  }
+}
+
+/* Custom crisp scrollbars for professional dense grid tables */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-400 dark:bg-slate-600 rounded;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-500 dark:bg-slate-500;
+}
+
+/* Laser scan line animation */
+@keyframes scanline {
+  0% { top: 4%; opacity: 0.85; }
+  50% { top: 92%; opacity: 1; }
+  100% { top: 4%; opacity: 0.85; }
+}
+
+.animate-scanline {
+  animation: scanline 2.2s ease-in-out infinite;
+}
+
+/* High contrast print-preview borders */
+.ledger-grid {
+  background-image: linear-gradient(to right, #e2e8f0 1px, transparent 1px),
+                    linear-gradient(to bottom, #e2e8f0 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.dark .ledger-grid {
+  background-image: linear-gradient(to right, #1e293b 1px, transparent 1px),
+                    linear-gradient(to bottom, #1e293b 1px, transparent 1px);
+}
+
+/* Screen print isolation utilities */
+.print-only {
+  display: none !important;
+}
+
+/* OFFICIAL THERMAL RECEIPT PRINT STYLES - PREVENTS FULL PAPER STRETCH */
+@media print {
+  @page {
+    /* 80mm thermal receipt roll dimensions */
+    size: 80mm auto;
+    margin: 2mm;
+  }
+
+  /* Reset all root page backgrounds for crisp thermal printing */
+  html, body {
+    width: 80mm !important;
+    max-width: 80mm !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide the entire web app UI during print */
+  #root,
+  .no-print,
+  nav,
+  aside,
+  header,
+  button,
+  footer {
+    display: none !important;
+  }
+
+  /* Exclusively display the official receipt container */
+  .print-only,
+  #official-receipt-print-area {
+    display: block !important;
+    visibility: visible !important;
+    width: 76mm !important;
+    max-width: 76mm !important;
+    margin: 0 auto !important;
+    padding: 2mm 1mm 6mm 1mm !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-family: 'JetBrains Mono', 'Courier New', Courier, monospace !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  #official-receipt-print-area * {
+    visibility: visible !important;
+  }
+
+  .official-thermal-receipt {
+    width: 76mm !important;
+    max-width: 76mm !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+}
+
+
