@@ -6,10 +6,13 @@ import {
   INITIAL_USERS, 
   INITIAL_CUSTOMERS, 
   INITIAL_DEBT_TRANSACTIONS 
-} from '../initialData.ts';
+} from '../initialData';
 
 // Path for the local embedded database file and automated backups
-const DATA_DIR = path.join(process.cwd(), 'data');
+const SEED_DATA_DIR = path.join(process.cwd(), 'data');
+const SEED_DB_FILE = path.join(SEED_DATA_DIR, 'pos_database.json');
+const IS_VERCEL = Boolean(process.env.VERCEL);
+const DATA_DIR = IS_VERCEL ? path.join('/tmp', 'bulaale_data') : SEED_DATA_DIR;
 const DB_FILE = path.join(DATA_DIR, 'pos_database.json');
 const DB_TMP_FILE = path.join(DATA_DIR, 'pos_database.json.tmp');
 const BACKUPS_DIR = path.join(DATA_DIR, 'backups');
@@ -328,6 +331,12 @@ export function initLocalDatabase(): LocalDatabaseSchema {
   try {
     if (!fs.existsSync(DATA_DIR)) {
       fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+
+    if (IS_VERCEL && !fs.existsSync(DB_FILE) && fs.existsSync(SEED_DB_FILE)) {
+      try {
+        fs.copyFileSync(SEED_DB_FILE, DB_FILE);
+      } catch {}
     }
 
     if (fs.existsSync(DB_FILE)) {

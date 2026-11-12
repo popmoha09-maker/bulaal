@@ -26,7 +26,7 @@ import {
   lookupProductInDb,
   saveProductAtomically,
   executeAtomicSale
-} from "./src/db/localDb.ts";
+} from "./src/db/localDb";
 import {
   initPostgresTables,
   getPostgresStatus,
@@ -42,7 +42,7 @@ import {
   deleteDebtInPostgres,
   clearInvoicesInPostgres,
   clearCustomerDebtsInPostgres
-} from "./src/db/postgresDb.ts";
+} from "./src/db/postgresDb";
 
 const app = express();
 const PORT =
@@ -790,6 +790,25 @@ app.use((err: any, _req: express.Request, res: express.Response, next: express.N
   });
 });
 
+let serverInitPromise: Promise<void> | null = null;
+
+export async function ensureServerInitialized(): Promise<void> {
+  if (!serverInitPromise) {
+    serverInitPromise = (async () => {
+      initLocalDatabase();
+      try {
+        await Promise.race([
+          initPostgresTables(),
+          new Promise((resolve) => setTimeout(resolve, 4000))
+        ]);
+      } catch (err: any) {
+        console.warn("PostgreSQL init notice:", err?.message || err);
+      }
+    })();
+  }
+  await serverInitPromise;
+}
+
 async function startServer() {
   // 1. Initialize local disk database cache immediately (sync and instant)
   initLocalDatabase();
@@ -881,5 +900,10 @@ async function startServer() {
   }, 4 * 60 * 60 * 1000);
 }
 
-startServer();
+if (!process.env.VERCEL) {
+  startServer();
+}
+
+export default app;
+
 
